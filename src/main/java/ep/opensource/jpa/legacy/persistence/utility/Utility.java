@@ -84,7 +84,7 @@ public class Utility {
     public static final String SQL_OPEN_BREAK = "(";
     public static final String SQL_CLOSE_BREAK = ")";
     
-    /***
+    /**
      * This constant {@link String} represents the error message to use then an {@link IllegalArgumentException}
      * is thrown because the assert on <code>null</code> value check fails. 
      */

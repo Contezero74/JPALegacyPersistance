@@ -49,6 +49,29 @@ public class TemporalTypeTest {
 	
 	/**
 	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
+	 * for the value {@link TemporalType#DATE} in case of null {@link ResultSet}.
+	 * 
+	 * @throws SQLException 
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public final void testFromForDATEWithNullResultSet() throws SQLException {
+		assertEquals("The result is not the expected one", NOW_SQL_TIME, TemporalType.DATE.from(null, COLUMN_LABEL));
+	}
+	
+	/**
+	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
+	 * for the value {@link TemporalType#DATE} in case of null ColumnLabel.
+	 * 
+	 * @throws SQLException 
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public final void testFromForDATEWithNullColumnLabel() throws SQLException {
+		assertEquals("The result is not the expected one", NOW_SQL_TIME, TemporalType.DATE.from(resultSet, null));
+	}
+	
+	
+	/**
+	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
 	 * for the value {@link TemporalType#TIME}.
 	 * 
 	 * @throws SQLException 
@@ -61,6 +84,28 @@ public class TemporalTypeTest {
 	
 	/**
 	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
+	 * for the value {@link TemporalType#TIME} in case of null {@link ResultSet}.
+	 * 
+	 * @throws SQLException 
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public final void testFromForTIMEWithNullResultSet() throws SQLException {
+		assertEquals("The result is not the expected one", NOW_SQL_TIME, TemporalType.TIME.from(null, COLUMN_LABEL));
+	}
+	
+	/**
+	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
+	 * for the value {@link TemporalType#TIME} in case of null ColumnLabel.
+	 * 
+	 * @throws SQLException 
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public final void testFromForTIMEWithNullColumnLabel() throws SQLException {
+		assertEquals("The result is not the expected one", NOW_SQL_TIME, TemporalType.TIME.from(resultSet, null));
+	}
+	
+	/**
+	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
 	 * for the value {@link TemporalType#TIMESTAMP}.
 	 * @throws SQLException 
 	 */
@@ -68,6 +113,28 @@ public class TemporalTypeTest {
 	public final void testFromForTIMESTAMP() throws SQLException {
 		assertEquals("The result is not the expected one", NOW_SQL_TIME, TemporalType.TIMESTAMP.from(resultSet, COLUMN_LABEL));
 		assertEquals("The result is not the expected one", null, TemporalType.TIMESTAMP.from(resultSet, COLUMN_NULL_LABEL));
+	}
+	
+	/**
+	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
+	 * for the value {@link TemporalType#TIMESTAMP} in case of null {@link ResultSet}.
+	 * 
+	 * @throws SQLException 
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public final void testFromForTIMESTAMPWithNullResultSet() throws SQLException {
+		assertEquals("The result is not the expected one", NOW_SQL_TIME, TemporalType.TIMESTAMP.from(null, COLUMN_LABEL));
+	}
+	
+	/**
+	 * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.TemporalType#from(java.sql.ResultSet, String)}
+	 * for the value {@link TemporalType#TIMESTAMP} in case of null ColumnLabel.
+	 * 
+	 * @throws SQLException 
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public final void testFromForTIMESTAMPWithNullColumnLabel() throws SQLException {
+		assertEquals("The result is not the expected one", NOW_SQL_TIME, TemporalType.TIMESTAMP.from(resultSet, null));
 	}
 	
 	/**
