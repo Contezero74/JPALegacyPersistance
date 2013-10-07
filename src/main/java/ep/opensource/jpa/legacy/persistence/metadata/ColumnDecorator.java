@@ -1,6 +1,5 @@
 package ep.opensource.jpa.legacy.persistence.metadata;
 
-import ep.ColumnMetadata;
 import ep.opensource.jpa.legacy.persistence.utility.Utility;
 
 /**

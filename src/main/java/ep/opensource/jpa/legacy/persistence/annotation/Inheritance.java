@@ -6,7 +6,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.lumata.e4o.database.support.test.pojo.metadata.InheritanceType;
+import ep.opensource.jpa.legacy.persistence.metadata.InheritanceType;
+
 
 /**
  * Defines the inheritance strategy to be used for an entity class hierarchy.

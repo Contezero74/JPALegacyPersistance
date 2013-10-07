@@ -172,7 +172,7 @@ public class EnumTypeTest {
 
 	
 	/**
-	 * This enumration is the one used during the tests.
+	 * This enumeration is the one used during the tests.
 	 */
 	private enum TestEnum {
 		ONE, TWO, THREE

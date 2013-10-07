@@ -92,20 +92,20 @@ public class PersistentPojoFactory {
      * @return the insert SQL query 
      */
     public static String getInsertSql(final EntityMetadata entity) {
-        final String tableName = entity.getTableMetadata().getTableName();
+        final String tableName = entity.getTableMetadata().getTableLabel();
         
         List<String> insertableColumns = new ArrayList<>();
         List<String> insertableParams = new ArrayList<>();
         for (ColumnMetadata columnMetadata : entity.getAllColumnsMetadata(AllColumnsGeneratedKeysFlag.WITHOUT_GENERATED).values()) {
             final String columnName = columnMetadata.getColumnLabel(ColumnDecorator.NONE);
             
-            if ( columnMetadata.isInsertable() && columnMetadata.getTableName().equals(tableName) ) {                    
+            if ( columnMetadata.isInsertable() && columnMetadata.getTableLabel().equals(tableName) ) {                    
                 insertableColumns.add(columnName);
                 insertableParams.add(Utility.SQL_PARAM);
             }
         }
         
-        return new StringBuilder(Utility.SQL_INSERT).append(entity.getTableMetadata().getTableName())
+        return new StringBuilder(Utility.SQL_INSERT).append(entity.getTableMetadata().getTableLabel())
                                                     .append(Utility.SQL_OPEN_BREAK)
                                                     .append(Utility.join(insertableColumns, Utility.SQL_COMMA))
                                                     .append(Utility.SQL_CLOSE_BREAK)
@@ -122,13 +122,13 @@ public class PersistentPojoFactory {
      * @return the update SQL query 
      */
     public static String getUpdateSql(final EntityMetadata entity) {
-        final String tableName = entity.getTableMetadata().getTableName();
+        final String tableName = entity.getTableMetadata().getTableLabel();
         
         List<String> updatableParams = new ArrayList<>();
         for (ColumnMetadata columnMetadata : entity.getOtherColumnsMetadata().values()) {
             final String columnName = columnMetadata.getColumnLabel(ColumnDecorator.TABLE);
             
-            if ( columnMetadata.isUpdatable() && columnMetadata.getTableName().equals(tableName) ) {                    
+            if ( columnMetadata.isUpdatable() && columnMetadata.getTableLabel().equals(tableName) ) {                    
                 updatableParams.add(columnName + Utility.SQL_EQUAL_PARAM);
             }
         }
@@ -140,7 +140,7 @@ public class PersistentPojoFactory {
             keyParam.add(columnName + Utility.SQL_EQUAL_PARAM);
         }    
        
-        return new StringBuilder(Utility.SQL_UPDATE).append(entity.getTableMetadata().getTableName())
+        return new StringBuilder(Utility.SQL_UPDATE).append(entity.getTableMetadata().getTableLabel())
                                                                   .append(Utility.SQL_SET)
                                                                   .append(Utility.join(updatableParams, Utility.SQL_COMMA))
                                                                   .append(Utility.SQL_WHERE)

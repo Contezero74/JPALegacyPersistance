@@ -9,16 +9,32 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import ep.ColumnMetadata;
 
-
+/**
+ * This helper is designed to support specific conversion from Java primitive types and classes to database values
+ * (and vice-versa).
+ */
 @SuppressWarnings("unchecked")
 public enum DataTypeConverter {
+    /**
+     * This helper represents all the classes that are not specialized.
+     */
     UNKNOWN,
+    
+    /**
+     * This helper represents all the Java primitive types.
+     */
     BASIC,
+    
+    /**
+     * This helper represents the java {@link java.util.Date} type. 
+     */
     JAVA_DATE {
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
+        <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
             assertNotNull(rs, "rs");
             assertNotNull(c, "c");
             
@@ -34,8 +50,11 @@ public enum DataTypeConverter {
             return (T) date;
         }
         
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public <T, O> O to(final T value, final ColumnMetadata c) {
+        <T, O> O to(final T value, final ColumnMetadata c) {
             assertNotNull(value, "value");
             assertNotNull(c, "c");
             
@@ -44,9 +63,16 @@ public enum DataTypeConverter {
             return (O) new java.sql.Date(date.getTime());
         }
     },
+    
+    /**
+     * This helper represents the java {@link java.util.Calendar} type. 
+     */
     JAVA_CALENDAR {
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
+        <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
             assertNotNull(rs, "rs");
             assertNotNull(c, "c");
             
@@ -63,8 +89,11 @@ public enum DataTypeConverter {
             return (T) date;
         }
         
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public <T, O> O to(final T value, final ColumnMetadata c) {
+        <T, O> O to(final T value, final ColumnMetadata c) {
             assertNotNull(value, "value");
             assertNotNull(c, "c");
             
@@ -73,9 +102,16 @@ public enum DataTypeConverter {
             return (O) new java.sql.Date(date.getTimeInMillis());
         }
     },
+    
+    /**
+     * This helper represents the java {@link java.lang.Enum} type and derived classes. 
+     */
     ENUM {
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
+        <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
             assertNotNull(rs, "rs");
             assertNotNull(c, "c");
             @SuppressWarnings("rawtypes")
@@ -92,8 +128,11 @@ public enum DataTypeConverter {
             return result;
         }
         
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public <T, O> O to(final T value, final ColumnMetadata c) {
+        <T, O> O to(final T value, final ColumnMetadata c) {
             assertNotNull(value, "value");
             assertNotNull(c, "c");
             
@@ -105,7 +144,18 @@ public enum DataTypeConverter {
         }
     };
     
-    public <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
+    /**
+     * This method converts the input attribute (retrieved via {@link ResultSet}) into the correct Java type.
+     * 
+     * @param rs the {@link ResultSet} instance storing the attribute to convert
+     * @param c the {@link ColumnMetadata} instance representing the database column to use to extract the value to
+     * convert from the {@link ResultSet} instance.
+     * 
+     * @return the converted Java type according to the the mata-information stored in the {@link ColumnMetadata} instance
+     * 
+     * @throws SQLException
+     */
+    <T> T from(final ResultSet rs, final ColumnMetadata c) throws SQLException {
         assertNotNull(rs, "rs");
         assertNotNull(c, "c");
         
@@ -116,14 +166,30 @@ public enum DataTypeConverter {
         return obj;
     }
     
-    public <T, O> O to(final T value, final ColumnMetadata c) {
+    /**
+     * This method converts the input generic value into the correct database type.
+     * 
+     * @param value the generic value to convert
+     * @param c the {@link ColumnMetadata} instance storing the meta-information needed to convert from the Java value
+     * into its database representation.
+     * 
+     * @return the converted database version of the input value
+     */
+    <T, O> O to(final T value, final ColumnMetadata c) {
         assertNotNull(value, "value");
         assertNotNull(c, "c");
         
         return (O) value;
     }
     
-    public static DataTypeConverter from(final Class<?> type) {
+    /**
+     * This factory method creates the correct {@link DataTypeConverter} instance starting from the input Java type.
+     * 
+     * @param type the Java type to use in order to create the {@link DataTypeConverter}
+     * 
+     * @return the correct {@link DataTypeConverter} instance starting from the input Java type
+     */
+    static DataTypeConverter create(final Class<?> type) {
         DataTypeConverter converter = null;
         if (null != type) {
             converter = CONVERTERS_MAP.get(type.toString());
@@ -136,8 +202,14 @@ public enum DataTypeConverter {
         return converter;
     }
     
+    /**
+     * This {@link Map} stores the specific conversion from the Java type to the {@link DataTypeConverter} instances.
+     */
     private static final Map<String, DataTypeConverter> CONVERTERS_MAP = new HashMap<>();
     
+    /**
+     * This configuration setups the {@link DataTypeConverter#CONVERTERS_MAP} map.
+     */
     static {
         CONVERTERS_MAP.put(java.util.Date.class.toString(), JAVA_DATE);
         CONVERTERS_MAP.put(java.util.Calendar.class.toString(), JAVA_CALENDAR);
@@ -153,7 +225,7 @@ public enum DataTypeConverter {
      * 
      * @throws IllegalArgumentException
      */
-    static <T> void assertNullability(final T value, final boolean isNullable, final String propertyName) throws IllegalArgumentException {
+    private static <T> void assertNullability(final T value, final boolean isNullable, final String propertyName) throws IllegalArgumentException {
         if (!isNullable && null == value) {
             throw new IllegalArgumentException(NOT_NULLABLE_PROPERTY + ((null != propertyName) ? propertyName : "unknown"));
         }
