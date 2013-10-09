@@ -259,13 +259,11 @@ public class ColumnMetadata {
      */
     private void setColumnAttributes(final Column a) {
         if (null != a) {
-            columnLabel = a.name();
+            columnLabel = a.name().isEmpty() ? columnLabel : a.name();
             isInsertable = a.insertable();
             isUpdatable = a.updatable();
             isNullable = a.nullable();
-            if (!a.table().isEmpty()) {
-                tableLabel = a.table();
-            }
+            tableLabel = a.table().isEmpty() ? tableLabel : a.table();
         }
     }
     

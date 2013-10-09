@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 /**
  * Specifies the mapped column for a persistent property or field. If no Column annotation is specified, the default
  */
-@Target(value=FIELD)
-@Retention(value=RUNTIME)
+@Target(value = FIELD)
+@Retention(value = RUNTIME)
 public @interface Column {
     /**
      * (Optional) The name of the column. Defaults to the property or field name.

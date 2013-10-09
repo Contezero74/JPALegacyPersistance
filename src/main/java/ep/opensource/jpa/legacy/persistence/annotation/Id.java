@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * If no {@link Column} annotation is specified, the primary key column name is assumed to be the name of the primary
  * key field.
  */
-@Target(value=FIELD)
-@Retention(value=RUNTIME)
+@Target(value = FIELD)
+@Retention(value = RUNTIME)
 public @interface Id {
 }

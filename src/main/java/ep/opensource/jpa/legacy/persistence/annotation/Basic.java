@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
  * Java primitive types, wrappers of the primitive types, {@link String}, {@link java.math.BigInteger},
  * {@link java.util.Date}, {@link java.util.Calendar}, <code>enums</code>, and any other type.
  */
-@Target(value=FIELD)
-@Retention(value=RUNTIME)
+@Target(value = FIELD)
+@Retention(value = RUNTIME)
 public @interface Basic {
     /**
      * (Optional) Defines whether the value of the field or property may be null. This is a hint and is disregarded for

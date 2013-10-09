@@ -5,6 +5,8 @@ package ep.opensource.jpa.legacy.persistence.metadata;
 
 import static org.junit.Assert.*;
 
+import static ep.opensource.jpa.legacy.persistence.utility.Utility.SQL_SEPARATOR;
+
 import java.lang.reflect.Field;
 
 import org.junit.Test;
@@ -12,8 +14,10 @@ import org.junit.Test;
 import ep.opensource.jpa.legacy.persistence.annotation.Basic;
 import ep.opensource.jpa.legacy.persistence.annotation.Column;
 import ep.opensource.jpa.legacy.persistence.annotation.Enumerated;
+import ep.opensource.jpa.legacy.persistence.annotation.GeneratedValue;
 import ep.opensource.jpa.legacy.persistence.annotation.Id;
 import ep.opensource.jpa.legacy.persistence.annotation.Transient;
+
 
 
 /**
@@ -38,10 +42,26 @@ public class ColumnMetadataTest {
 
     /**
      * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.ColumnMetadata#getColumnLabel(ep.opensource.jpa.legacy.persistence.metadata.ColumnDecorator)}.
+     * @throws SecurityException 
+     * @throws NoSuchFieldException 
      */
     @Test
-    public final void testGetColumnLabel() {
-        fail("Not yet implemented"); // TODO
+    public final void testGetColumnLabel() throws NoSuchFieldException, SecurityException {
+        ColumnMetadata cmId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ID_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The column label has to match", ID_NAME, cmId.getColumnLabel(ColumnDecorator.NONE));
+        assertEquals("The column label has to match", PRIMARY_TABLE_LABEL + SQL_SEPARATOR + ID_NAME, cmId.getColumnLabel(ColumnDecorator.TABLE));
+        
+        ColumnMetadata cmTransient = new ColumnMetadata(TestClassAllPublicProperties.class.getField(TRANSIENT_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The column label has to match", TRANSIENT_NAME, cmTransient.getColumnLabel(ColumnDecorator.NONE));
+        assertEquals("The column label has to match", PRIMARY_TABLE_LABEL + SQL_SEPARATOR + TRANSIENT_NAME, cmTransient.getColumnLabel(ColumnDecorator.TABLE));
+        
+        ColumnMetadata cmEnum1 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM1_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The column label has to match", COLUMN_ENUM1_LABEL, cmEnum1.getColumnLabel(ColumnDecorator.NONE));
+        assertEquals("The column label has to match", PRIMARY_TABLE_LABEL + SQL_SEPARATOR + COLUMN_ENUM1_LABEL, cmEnum1.getColumnLabel(ColumnDecorator.TABLE));
+        
+        ColumnMetadata cmEnum2 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM2_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The column label has to match", ENUM2_NAME, cmEnum2.getColumnLabel(ColumnDecorator.NONE));
+        assertEquals("The column label has to match", SECONDARY_TABLE_LABEL + SQL_SEPARATOR + ENUM2_NAME, cmEnum2.getColumnLabel(ColumnDecorator.TABLE));
     }
 
     /**
@@ -61,10 +81,20 @@ public class ColumnMetadataTest {
 
     /**
      * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.ColumnMetadata#getOriginalType()}.
+     * 
+     * @throws SecurityException 
+     * @throws NoSuchFieldException 
      */
     @Test
-    public final void testGetOriginalType() {
-        fail("Not yet implemented"); // TODO
+    public final void testGetOriginalType() throws NoSuchFieldException, SecurityException {
+        ColumnMetadata cmId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ID_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The class has to match", int.class, cmId.getOriginalType());
+        
+        ColumnMetadata cmTransient = new ColumnMetadata(TestClassAllPublicProperties.class.getField(TRANSIENT_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The class has to match", String.class, cmTransient.getOriginalType());
+        
+        ColumnMetadata cmEnum2 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM2_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The class has to match", TestEnum.class, cmEnum2.getOriginalType());
     }
 
     /**
@@ -84,10 +114,20 @@ public class ColumnMetadataTest {
 
     /**
      * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.ColumnMetadata#isGenerated()}.
+     * 
+     * @throws SecurityException 
+     * @throws NoSuchFieldException 
      */
     @Test
-    public final void testIsGenerated() {
-        fail("Not yet implemented"); // TODO
+    public final void testIsGenerated() throws NoSuchFieldException, SecurityException {
+        ColumnMetadata cmId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ID_NAME), PRIMARY_TABLE_LABEL);
+        assertFalse("The property key " + ID_NAME + " should be not generated", cmId.isGenerated());
+        
+        ColumnMetadata cmSecondaryId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(SECONDARY_ID_NAME), PRIMARY_TABLE_LABEL);
+        assertTrue("The property key " + SECONDARY_ID_NAME + " should be generated", cmSecondaryId.isGenerated());
+        
+        ColumnMetadata cmTransient = new ColumnMetadata(TestClassAllPublicProperties.class.getField(TRANSIENT_NAME), PRIMARY_TABLE_LABEL);
+        assertFalse("The property " + TRANSIENT_NAME + " should be not generated", cmTransient.isGenerated());
     }
 
     /**
@@ -213,26 +253,56 @@ public class ColumnMetadataTest {
 
     /**
      * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.ColumnMetadata#isEnumType()}.
+     * 
+     * @throws SecurityException 
+     * @throws NoSuchFieldException 
      */
     @Test
-    public final void testIsEnumType() {
-        fail("Not yet implemented"); // TODO
+    public final void testIsEnumType() throws NoSuchFieldException, SecurityException {
+        ColumnMetadata cmEnum1 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM1_NAME), PRIMARY_TABLE_LABEL);
+        assertFalse("The property " + ENUM1_NAME + ".isEnumType() has to match", cmEnum1.isEnumType());
+        
+        ColumnMetadata cmEnum2 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM2_NAME), PRIMARY_TABLE_LABEL);
+        assertTrue("The property " + ENUM2_NAME + ".isEnumType() has to match", cmEnum2.isEnumType());
+        
+        ColumnMetadata cmId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ID_NAME), PRIMARY_TABLE_LABEL);
+        assertFalse("The property " + ID_NAME + ".isEnumType() has to match", cmId.isEnumType());
     }
 
     /**
      * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.ColumnMetadata#getEnumType()}.
+     * 
+     * @throws SecurityException 
+     * @throws NoSuchFieldException 
      */
     @Test
-    public final void testGetEnumType() {
-        fail("Not yet implemented"); // TODO
+    public final void testGetEnumType() throws NoSuchFieldException, SecurityException {
+        ColumnMetadata cmEnum1 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM1_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The property " + ENUM1_NAME + ".getEnumType() has to match", null, cmEnum1.getEnumType());
+        
+        ColumnMetadata cmEnum2 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM2_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The property " + ENUM2_NAME + ".getEnumType() has to match", EnumType.ORDINAL.getClass().getName(), cmEnum2.getEnumType().getClass().getName());
+        
+        ColumnMetadata cmId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ID_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The property " + ID_NAME + ".getEnumType() has to match", null, cmId.getEnumType());
     }
 
     /**
      * Test method for {@link ep.opensource.jpa.legacy.persistence.metadata.ColumnMetadata#getConverter()}.
+     * 
+     * @throws SecurityException 
+     * @throws NoSuchFieldException 
      */
     @Test
-    public final void testGetConverter() {
-        fail("Not yet implemented"); // TODO
+    public final void testGetConverter() throws NoSuchFieldException, SecurityException {
+        ColumnMetadata cmId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ID_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The property " + ID_NAME + " has to return the correct Coverter", DataTypeConverter.BASIC.getClass().getName(), cmId.getConverter().getClass().getName());
+        
+        ColumnMetadata cmSecondaryId = new ColumnMetadata(TestClassAllPublicProperties.class.getField(SECONDARY_ID_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The property " + SECONDARY_ID_NAME + " has to return the correct Coverter", DataTypeConverter.UNKNOWN.getClass().getName(), cmSecondaryId.getConverter().getClass().getName());
+        
+        ColumnMetadata cmEnum1 = new ColumnMetadata(TestClassAllPublicProperties.class.getField(ENUM1_NAME), PRIMARY_TABLE_LABEL);
+        assertEquals("The property " + ENUM1_NAME + " has to return the correct Coverter", DataTypeConverter.ENUM.getClass().getName(), cmEnum1.getConverter().getClass().getName());
     }
 
     /**
@@ -300,6 +370,7 @@ public class ColumnMetadataTest {
         @Transient public String transientProperty;
         
         @Id public int id;
+        @Id @GeneratedValue() public Integer secondaryId;
         
         @Basic(optional=true) public long isOptional;
         
@@ -325,7 +396,7 @@ public class ColumnMetadataTest {
         
         @Column(insertable = false, updatable=false) public String notInsertableAndNotUpdatable;
         
-        public TestEnum enum1;
+        @Column(name=COLUMN_ENUM1_LABEL) public TestEnum enum1;
         
         @Enumerated @Column(table=SECONDARY_TABLE_LABEL) public TestEnum enum2;
     }
@@ -333,7 +404,10 @@ public class ColumnMetadataTest {
     private static final String PRIMARY_TABLE_LABEL = "primary_table";
     private static final String SECONDARY_TABLE_LABEL = "secondary_table";
     
+    private static final String COLUMN_ENUM1_LABEL = "enumeration_one";
+    
     private static final String ID_NAME = "id";
+    private static final String SECONDARY_ID_NAME = "secondaryId";
     
     private static final String TRANSIENT_NAME = "transientProperty";
     
@@ -351,5 +425,6 @@ public class ColumnMetadataTest {
     private static final String NOT_INSERTABLE_UPDATABLE_NAME = "notInsertableButUpdatable";
     private static final String NOT_INSERTABLE_NOT_UPDATABLE_NAME = "notInsertableAndNotUpdatable";
     
+    private static final String ENUM1_NAME = "enum1";
     private static final String ENUM2_NAME = "enum2";    
 }

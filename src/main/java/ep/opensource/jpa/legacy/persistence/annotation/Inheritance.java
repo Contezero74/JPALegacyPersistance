@@ -15,8 +15,8 @@ import ep.opensource.jpa.legacy.persistence.metadata.InheritanceType;
  * If the Inheritance annotation is not specified or if no inheritance type is specified for an entity class hierarchy,
  * the {@link InheritanceType#SINGLE_TABLE} mapping strategy is used.
  */
-@Target(value=TYPE)
-@Retention(value=RUNTIME)
+@Target(value = TYPE)
+@Retention(value = RUNTIME)
 public @interface Inheritance {
     /**
      * The strategy to be used for the entity inheritance hierarchy.

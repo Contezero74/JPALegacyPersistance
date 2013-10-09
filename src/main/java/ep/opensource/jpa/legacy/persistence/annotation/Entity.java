@@ -11,8 +11,8 @@ import java.lang.annotation.Target;
  * Specifies that the class is an entity. This annotation is applied to the entity class.
  */
 @Documented
-@Target(value=TYPE)
-@Retention(value=RUNTIME)
+@Target(value = TYPE)
+@Retention(value = RUNTIME)
 public @interface Entity {
     /**
      * (Optional) The entity name.

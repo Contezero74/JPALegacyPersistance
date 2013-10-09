@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * Specifies that the property or field is not persistent.
  * It is used to annotate a property of an entity class, or mapped superclass.
  */
-@Target(value=FIELD)
-@Retention(value=RUNTIME)
+@Target(value = FIELD)
+@Retention(value = RUNTIME)
 public @interface Transient {
 }

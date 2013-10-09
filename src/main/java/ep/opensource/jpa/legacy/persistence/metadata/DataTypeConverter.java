@@ -38,7 +38,7 @@ public enum DataTypeConverter {
             assertNotNull(rs, "rs");
             assertNotNull(c, "c");
             
-            java.util.Date date = null;
+            Date date = null;
             if (!c.isTemporalType()) {
                 date = (Date) rs.getObject(c.getColumnLabel(ColumnDecorator.TABLE), c.getOriginalType());
             } else {
@@ -58,7 +58,7 @@ public enum DataTypeConverter {
             assertNotNull(value, "value");
             assertNotNull(c, "c");
             
-            java.util.Date date = (java.util.Date) value;
+            Date date = (Date) value;
             
             return (O) new java.sql.Date(date.getTime());
         }
@@ -211,8 +211,8 @@ public enum DataTypeConverter {
      * This configuration setups the {@link DataTypeConverter#CONVERTERS_MAP} map.
      */
     static {
-        CONVERTERS_MAP.put(java.util.Date.class.toString(), JAVA_DATE);
-        CONVERTERS_MAP.put(java.util.Calendar.class.toString(), JAVA_CALENDAR);
+        CONVERTERS_MAP.put(Date.class.toString(), JAVA_DATE);
+        CONVERTERS_MAP.put(Calendar.class.toString(), JAVA_CALENDAR);
     }
       
     /**

@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
  * Specifies the primary table for the annotated entity.
  * If no {@link Table} annotation is specified for an entity class, the default values apply.
  */
-@Target(value=TYPE)
-@Retention(value=RUNTIME)
+@Target(value = TYPE)
+@Retention(value = RUNTIME)
 public @interface Table {
     /**
      * (Optional) The name of the table.

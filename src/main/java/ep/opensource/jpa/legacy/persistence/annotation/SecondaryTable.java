@@ -17,8 +17,8 @@ import java.lang.annotation.Target;
  * key columns of the primary table.
  */
 @Documented
-@Target(value=TYPE)
-@Retention(value=RUNTIME)
+@Target(value = TYPE)
+@Retention(value = RUNTIME)
 public @interface SecondaryTable {
     /**
      * The name of the table.

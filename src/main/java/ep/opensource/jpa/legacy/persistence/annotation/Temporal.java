@@ -16,8 +16,8 @@ import ep.opensource.jpa.legacy.persistence.metadata.TemporalType;
  * It may only be specified for fields of these types. The {@link Temporal} annotation may be used in conjunction
  * with the {@link Basic} annotation and the {@link Id} annotation.
  */
-@Target(value=FIELD)
-@Retention(value=RUNTIME)
+@Target(value = FIELD)
+@Retention(value = RUNTIME)
 public @interface Temporal {
     /**
      * The type used in mapping {@link java.util.Date} or {@link java.util.Calendar}.

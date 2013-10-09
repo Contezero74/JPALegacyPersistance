@@ -11,8 +11,8 @@ import java.lang.annotation.Target;
  * This annotation specifies a primary key column that is used as a foreign key to join to another table.
  */
 @Documented
-@Target(value=TYPE)
-@Retention(value=RUNTIME)
+@Target(value = TYPE)
+@Retention(value = RUNTIME)
 public @interface PrimaryKeyJoinColumn {
     /**
      * (Optional) The name of the primary key column of the current table.

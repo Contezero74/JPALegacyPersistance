@@ -7,16 +7,17 @@ import java.util.Collection;
  * For every method present in this class there is a better implementation, but the idea is to maintain this
  * implementation as more as possible auto-included.
  */
-public class Utility {
+public final class Utility {
 	/**
 	 * This static method returns a {@link String} representing the the concatenation of the input
 	 * {@link Collection}.
 	 * 
+	 * @param <T> the type of the {@link Collection} items to join
 	 * @param collection the {@link Collection} to concatenated into a {@link String}
 	 * 
 	 * @return a {@link String} representing the the concatenation of the input {@link Collection}
 	 */
-    public static String join(final Collection<?> collection) {
+    public static <T> String join(final Collection<T> collection) {
         return join(collection, "");
     }
     
@@ -24,6 +25,7 @@ public class Utility {
 	 * This static method returns a {@link String} representing the the concatenation of the input
 	 * {@link Collection} using the separator provided.
 	 * 
+	 * @param <T> the type of the {@link Collection} items to join
 	 * @param collection the {@link Collection} to concatenated into a {@link String}
 	 * @param separator the {@link String} representing the separator used to concatenate the items
 	 * of the input {@link Collection}
@@ -83,6 +85,11 @@ public class Utility {
     public static final String SQL_EQUAL = "=";
     public static final String SQL_OPEN_BREAK = "(";
     public static final String SQL_CLOSE_BREAK = ")";
+    
+    /**
+     * This private constructor doesn't permit to create an instance of this class.
+     */
+    private Utility() { }
     
     /**
      * This constant {@link String} represents the error message to use then an {@link IllegalArgumentException}
