@@ -12,23 +12,23 @@ public class PersistentPojo<T> {
     public PersistentPojo(final Class<T> baseClass) {
         Utility.assertNotNull(baseClass, "baseClass");
         
-        entity = PersistentPojoFactory.createEntityMetadata(baseClass);
+        entity = JPALegacyFactory.createEntityMetadata(baseClass);
     }
     
     public String getSelectSQL() {
-        return PersistentPojoFactory.getSelectSql(entity);
+        return JPALegacyFactory.getSelectSql(entity);
     }
     
     public String getSelectSQLById() {
-        return PersistentPojoFactory.getSelectByIdSql(entity);
+        return JPALegacyFactory.getSelectByIdSql(entity);
     }
     
     public String getInsertSQL() {
-        return PersistentPojoFactory.getInsertSql(entity);
+        return JPALegacyFactory.getInsertSql(entity);
     }
        
     public String getUpdateSQL() {
-        return PersistentPojoFactory.getUpdateSql(entity);
+        return JPALegacyFactory.getUpdateSql(entity);
     }
         
     public String getDeleteSQL() {
@@ -44,7 +44,7 @@ public class PersistentPojo<T> {
     }
         
     public static <T extends PersistentPojo<T>> T from(final ResultSet rs, final T entity) throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
-        return PersistentPojoFactory.from(rs, entity.getEntity());
+        return JPALegacyFactory.from(rs, entity.getEntity());
     }
     
     private EntityMetadata entity;

@@ -3,6 +3,8 @@ package ep.opensource.jpa.legacy.persistence.metadata;
 import static ep.opensource.jpa.legacy.persistence.utility.Utility.assertNotNull;
 
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import ep.opensource.jpa.legacy.persistence.annotation.Basic;
 import ep.opensource.jpa.legacy.persistence.annotation.Column;
@@ -184,7 +186,7 @@ public class ColumnMetadata {
         
         boolean isAccessible = property.isAccessible();
         property.setAccessible(true);
-        value = (O) converter.to(property.get(obj), this);
+        value = (O) property.get(obj);
         property.setAccessible(isAccessible);
         
         return value;
@@ -201,13 +203,35 @@ public class ColumnMetadata {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    public <T, I> void setFieldValue(final T obj, final I value) throws IllegalArgumentException, IllegalAccessException {
+    public <O, V> void setFieldValue(final O obj, final V value) throws IllegalArgumentException, IllegalAccessException {
         assertNotNull(obj, "obj");
         
         boolean isAccessible = property.isAccessible();
         property.setAccessible(true);
         property.set(obj, value);
         property.setAccessible(isAccessible);
+    }
+    
+    /**
+     * This method sets the the property value using the input {@link ResultSet} as source.     * 
+     * 
+     * @param obj the instance of the Java entity to update with the new value
+     * @param rs the {@link ResultSet} instance storing the value to set
+     * 
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws SQLException 
+     */
+    public <O, T> void setFieldValue(final O obj, final ResultSet rs) throws IllegalArgumentException, IllegalAccessException, SQLException {
+        assertNotNull(obj, "obj");
+        assertNotNull(rs, "rs");
+        
+        @SuppressWarnings("unchecked")
+		T value = (T) rs.getObject(getColumnLabel(ColumnDecorator.TABLE), getOriginalType());
+        
+        assertNullability(obj, isNullable(), getPropertyName());
+        
+        setFieldValue(obj, getConverter().from(value, this));
     }
     
     /**
@@ -403,4 +427,26 @@ public class ColumnMetadata {
      * This property stores the {@link DataTypeConverter} instance related to the current database entity column. 
      */
     private DataTypeConverter converter = null;
+    
+    /**
+     * This utility method verifies if the <code>value</code> related to the property <code>propertyName</code>
+     * is null or not according to the argument <code>isNullable</code>.
+     * 
+     * @param value the value to check
+     * @param isNullable true if the value can be <code>null</code>, false otherwise
+     * @param propertyName the property name associated to the value input
+     * 
+     * @throws IllegalArgumentException
+     */
+    private static <T> void assertNullability(final T value, final boolean isNullable, final String propertyName) throws IllegalArgumentException {
+        if (!isNullable && null == value) {
+            throw new IllegalArgumentException(NOT_NULLABLE_PROPERTY + ((null != propertyName) ? propertyName : "unknown"));
+        }
+    }
+    
+    /**
+     * This constant {@link String} represents the error message to use then a property is <code>null</code>
+     * but it shouldn't be. 
+     */
+    private static final String NOT_NULLABLE_PROPERTY = "the property cannot be null: ";
 }
